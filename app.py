@@ -164,5 +164,37 @@ def form_sample():
         return "Форма отправлена"
 
 
+@app.route("/choice/<planet_name>")
+def choice(planet_name):
+    texts = {"марс": ["Эта планета близка к Земле", "На ней много ресурсов", "На ней есть атмосфера"],
+             "земля": ["Это наша планета", "На ней есть крутые ресурсы", "И ещё на ней есть я"]}
+    if planet_name.lower() in texts:
+        text = texts[planet_name]
+    else:
+        text = ["Если вы это видите,", "то это значит, что", "мне было лень"]
+    return f"""<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <link rel="stylesheet" 
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" 
+            integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" 
+            crossorigin="anonymous">
+            <title>Привет, Марс!</title>
+        </head>
+        <body>
+            <h1> Моё предложение: {planet_name} </h1>
+            <h2> {text[0]} </h2>
+            <div class="alert alert-success" role="alert">
+            {text[1]}
+            </div>
+            <div class="alert alert-secondary" role="alert">
+            {text[2]}
+            </div>
+        </body>
+        </html>"""
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080)
