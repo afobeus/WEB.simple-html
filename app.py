@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request
+from flask import Flask, url_for, request, redirect
 
 app = Flask(__name__)
 
@@ -221,6 +221,72 @@ def results(nickname, level, rating):
             </div>
         </body>
         </html>"""
+
+
+@app.route('/sample_file_upload', methods=['POST', 'GET'])
+def sample_file_upload():
+    if request.method == 'GET':
+        return f'''<!doctype html>
+                        <html lang="en">
+                          <head>
+                            <meta charset="utf-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                             <link rel="stylesheet"
+                             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+                             integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+                             crossorigin="anonymous">
+                            <link rel="stylesheet" href="{url_for('static', filename='css/style.css')}" />
+                            <title>Пример загрузки файла</title>
+                          </head>
+                          <body>
+                            <h1>Загрузка фотографии</h1>
+                            <h2>для участия в миссии</h2>
+                            <form method="post" class="login_form" enctype="multipart/form-data">
+                                <legend>Выберите файл</legend>
+                                <input type="file" class="form-control-file" id="photo" name="file">
+                                <button type="submit" class="btn btn-primary">Отправить</button>
+                            </form>
+                          </body>
+                        </html>'''
+    elif request.method == 'POST':
+        f = request.files['file']
+        print(f.read())
+        return "Форма отправлена"
+
+
+@app.route('/load_photo', methods=['POST', 'GET'])
+def load_photo():
+    if request.method == 'GET':
+        return f'''<!doctype html>
+                            <html lang="en">
+                              <head>
+                                <meta charset="utf-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                                 <link rel="stylesheet"
+                                 href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+                                 integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+                                 crossorigin="anonymous">
+                                <link rel="stylesheet" href="{url_for('static', filename='css/style.css')}">
+                                <title>Пример загрузки файла</title>
+                              </head>
+                              <body>
+                                <h1>Загрузка фотографии</h1>
+                                <h2>для участия в миссии</h2>
+                                <form method="post" enctype="multipart/form-data">
+                                   <div class="form-group">
+                                        <p>Приложите фотографию</p>
+                                        <input type="file" class="form-control-file" id="photo" name="file">
+                                    <img src="{url_for("static", filename="images/image.png")}" alt="">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Отправить</button>
+                                </form>
+                              </body>
+                            </html>'''
+    elif request.method == 'POST':
+        f = request.files['file']
+        with open("static/images/image.png", 'wb') as image_file:
+            image_file.write(f.read())
+        return redirect("/load_photo")
 
 
 if __name__ == '__main__':
